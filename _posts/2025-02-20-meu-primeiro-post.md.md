@@ -2,7 +2,7 @@
 title: "*Teste" 
 author: Gabriel Fernandes
 date: 2025-02-20
-categories: [Malware Breakdown]
+categories: [Estudos]
 tags: [FIN7, Spear Phishing, e-mail, attachment, macros, Flare VM]
 ---
 
