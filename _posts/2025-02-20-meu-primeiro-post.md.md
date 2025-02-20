@@ -1,3 +1,12 @@
+---
+title: "*Teste" 
+author: Gabriel Fernandes
+date: 2025-02-20
+categories: [Malware Breakdown]
+tags: [FIN7, Spear Phishing, e-mail, attachment, macros, Flare VM]
+---
+
+
 # **🔐 O que é Broken Access Control?**
 
 **Broken Access Control** refere-se a falhas em mecanismos que deveriam restringir o acesso a recursos ou funcionalidades de uma aplicação. Isso significa que os usuários podem acessar, modificar ou excluir dados ou funcionalidades que não estão autorizados a ver ou manipular. É uma das vulnerabilidades mais comuns e críticas em aplicações web, frequentemente listada entre as principais ameaças no **OWASP Top 10**.
