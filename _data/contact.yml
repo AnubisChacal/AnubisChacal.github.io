@@ -3,17 +3,11 @@
 -
   type: linkedin
   icon: 'fab fa-linkedin'   # icons powered by <https://fontawesome.com/>
-  url:  'https://nz.linkedin.com/in/pratik-patel-oscp-459040a7'
+  url:  'https://www.linkedin.com/in/gabriel-cybersecurity/'
 -
   type: github
   icon: 'fab fa-github-alt'
 -
-  type: twitter
-  icon: 'fab fa-twitter'
--
-  type: email
-  icon: 'fas fa-envelope'
-  noblank: true            # open link in current tab
 
   #type: rss
   #icon: 'fas fa-rss'
@@ -24,10 +18,6 @@
 #   type: mastodon
 #   icon: 'fab fa-mastodon'   # icons powered by <https://fontawesome.com/>
 #   url:  ''                  # Fill with your mastodon account page
-# -
-#   type: linkedin
-#   icon: 'fab fa-linkedin'   # icons powered by <https://fontawesome.com/>
-#   url:  ''                  # Fill with your Linkedin homepage
 # -
 #   type: stack-overflow
 #   icon: 'fab fa-stack-overflow'
