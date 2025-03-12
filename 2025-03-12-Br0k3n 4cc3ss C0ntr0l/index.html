@@ -1,0 +1,114 @@
+<h1 id="️-o-que-é-broken-access-control">⚠️ O que é Broken Access Control?</h1>
+
+<p>Refere-se a falhas em mecanismos que deveriam restringir o acesso a recursos ou funcionalidades de uma aplicação. Isso significa que os usuários podem acessar, modificar ou excluir dados ou funcionalidades que não estão autorizados a ver ou manipular. É uma das vulnerabilidades mais comuns e críticas em aplicações web, frequentemente listada entre as principais ameaças no <strong>OWASP Top 10</strong>.</p>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/Owasp.png" alt="alt text" title="OWASP" /></p>
+
+<h1 id="-como-posso-encontrar">🔍 Como posso encontrar?</h1>
+<h3 id="1-escalonamento-horizontal">1. Escalonamento Horizontal</h3>
+
+<p><strong>Descrição</strong>: Um usuário acessa dados de outro usuário que não deveria ser capaz de acessar, geralmente manipulando parâmetros na URL ou no corpo da requisição.</p>
+
+<p><strong>Exemplo de Código Vulnerável</strong>:</p>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/horizontal-attack.png" alt="alt text" title="Horizontal Attack" /></p>
+
+<p><strong>Exploração</strong>: Um atacante pode alterar o <code class="language-plaintext highlighter-rouge">user_id</code> na URL, por exemplo, de <code class="language-plaintext highlighter-rouge">http://exemplo.com/user.php?user_id=1</code> para <code class="language-plaintext highlighter-rouge">http://exemplo.com/user.php?user_id=2</code> e acessar dados de outro usuário.</p>
+
+<h3 id="2-escalonamento-vertical">2. Escalonamento Vertical</h3>
+
+<p><strong>Descrição</strong>: Um usuário comum consegue realizar ações administrativas que deveriam ser restritas a administradores.</p>
+
+<p><strong>Exemplo de Código Vulnerável</strong>:</p>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/Vertical-attack.png" alt="alt text" title="Vertical Attack" /></p>
+
+<p><strong>Exploração</strong>: Um usuário normal pode executar essa ação se souber manipular o formulário e enviar uma requisição POST para excluir um usuário.</p>
+
+<h3 id="3-controle-de-vulnerabilidade-de-acesso-em-múltiplos-estados-de-processo">3. Controle de Vulnerabilidade de Acesso em Múltiplos Estados de Processo</h3>
+
+<p><strong>Descrição</strong>: Um usuário manipula o estado de uma transação sem a devida validação.</p>
+
+<p><strong>Exemplo de Código Vulnerável</strong>:</p>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/Multiplos-escalo-attack.png" alt="alt text" title="Multiplos Escalonamento Attack" /></p>
+
+<p><strong>Exploração</strong>: Um usuário pode manipular o <code class="language-plaintext highlighter-rouge">order_id</code> para alterar o status de um pedido que não lhe pertence, finalizando compras indevidas.</p>
+
+<h3 id="conclusão">Conclusão</h3>
+
+<p>Esses exemplos ilustram como o <strong>Broken Access Control</strong> pode ser explorado em aplicações PHP e como implementar práticas de segurança para proteger seus sistemas. As verificações de permissão e a validação de estados são cruciais para evitar acessos não autorizados. Se precisar de mais informações ou exemplos adicionais, é só avisar!</p>
+
+<h1 id="-como-posso-explorar-essa-vulnerabilidade">🔑 Como posso explorar essa vulnerabilidade?</h1>
+
+<p>Este laboratório armazena logs de bate-papo do usuário diretamente no sistema de arquivos do servidor e os recupera usando URLs estáticas.</p>
+
+<p>Resolva o laboratório descobrindo a senha do usuário <code class="language-plaintext highlighter-rouge">carlos</code>e efetuando login na conta dele.</p>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/Lab-carlos.png" alt="alt text" title="Lab - Portswigger" /></p>
+
+<h3 id="1️⃣-identificação-da-funcionalidade-vulnerável"><strong>1️⃣ Identificação da funcionalidade vulnerável</strong></h3>
+
+<ul>
+  <li>O site fornece um <strong>chat ao vivo</strong> onde as mensagens trocadas entre usuários são armazenadas e podem ser baixadas como um <strong>arquivo de transcript</strong> (<code class="language-plaintext highlighter-rouge">.txt</code>).</li>
+  <li>Observamos que há uma opção <strong>“View transcript”</strong> para baixar o histórico do chat.</li>
+  <li>O número antes da extensão <code class="language-plaintext highlighter-rouge">.txt</code> indica um identificador único para cada transcript</li>
+</ul>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/Live-chat.png" alt="alt text" title="Live Chat" /></p>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/Arquivo-txt.png" alt="alt text" title="Arquivo .TXT" /></p>
+
+<h3 id="2️⃣-exploração-da-vulnerabilidade-idor">2️⃣ <strong>Exploração da vulnerabilidade IDOR</strong></h3>
+
+<ul>
+  <li>A vulnerabilidade ocorre porque o sistema <strong>não valida se o usuário tem permissão para acessar um transcript específico</strong>.</li>
+  <li>Podemos testar manualmente se conseguimos acessar arquivos de outras sessões do chat, modificando o identificador na URL:</li>
+  <li>Para verificar isso de forma mais eficiente, utilizamos o Burp Suite para interceptar a requisição e modificar o identificador.</li>
+</ul>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/Recon-IDOR.png" alt="alt text" title="Recon IDOR" /></p>
+
+<h3 id="3️⃣-uso-do-burp-suite-para-automação-do-ataque"><strong>3️⃣ Uso do Burp Suite para automação do ataque</strong></h3>
+
+<h4 id="interceptação-da-requisição"><strong>Interceptação da requisição</strong></h4>
+
+<ul>
+  <li>No <strong>Burp Suite</strong>, acessamos a aba <strong>Proxy</strong> e capturamos a requisição <code class="language-plaintext highlighter-rouge">GET /download-transcript/2.txt HTTP/2</code>.</li>
+  <li>Enviamos essa requisição para o <strong>Repeater</strong>, onde podemos testá-la manualmente.</li>
+</ul>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/Repter.png" alt="alt text" title="BurpSuite - Repeater" /></p>
+
+<h4 id="manipulação-do-id-do-transcript"><strong>Manipulação do ID do transcript</strong></h4>
+
+<ul>
+  <li>Alteramos a requisição <code class="language-plaintext highlighter-rouge">GET</code> no <strong>Repeater</strong>, mudando <code class="language-plaintext highlighter-rouge">2.txt</code> para <code class="language-plaintext highlighter-rouge">1.txt</code>:</li>
+  <li>Enviamos a requisição novamente.</li>
+  <li>O servidor retorna um arquivo que pertence a outro usuário.
+    <h3 id="4️⃣-exposição-de-senha">4️⃣ <strong>Exposição de senha</strong></h3>
+  </li>
+  <li>
+    <p>No conteúdo do transcript <code class="language-plaintext highlighter-rouge">1.txt</code>, encontramos uma conversa onde um usuário compartilha sua senha para confirmação:</p>
+
+    <p><code class="language-plaintext highlighter-rouge">You: Ok so my password is cep12xuxsha2ppv428j. Is that right? Hal Pline: Yes it is!</code></p>
+  </li>
+  <li>Esse é um caso clássico de <strong>engenharia social</strong> dentro de um sistema vulnerável.</li>
+</ul>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/Expondo-password.png" alt="alt text" title="Password" /></p>
+
+<h3 id="5️⃣-login-como-o-usuário-alvo"><strong>5️⃣ Login como o usuário alvo</strong></h3>
+
+<ul>
+  <li>Agora que temos a senha <code class="language-plaintext highlighter-rouge">cep12xuxsha2ppv428j</code>, verificamos o objetivo do desafio:
+    <ul>
+      <li>No enunciado do laboratório, a missão é <strong>acessar a conta do usuário “carlos”</strong>.</li>
+    </ul>
+  </li>
+  <li>Usamos essas credenciais para tentar o login na plataforma como <strong>carlos</strong></li>
+</ul>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/Login.png" alt="alt text" title="Login" /></p>
+
+<p><img src="/assets/img/Br0k3n 4cc3ss C0ntr0l/Sucesso-login.png" alt="alt text" title="Sucesso" /></p>
